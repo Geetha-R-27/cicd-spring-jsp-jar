@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        SHARED_DIR = "/var/shared-app"
+        SHARED_DIR = "/var/shared-app/app.jar"
     }
 
     stages {
@@ -24,13 +24,14 @@ pipeline {
         }
 
         stage('Copy JAR to Shared Folder') {
-            steps {
-                script {
-                    JAR = sh(script: "ls target/*.jar | head -n 1", returnStdout: true).trim()
-                    sh "cp ${JAR} ${SHARED_DIR}/app.jar"
-                }
-            }
+    steps {
+        script {
+            def JAR = sh(script: "ls target/*.jar | head -n 1", returnStdout: true).trim()
+            echo "Copying ${JAR} to shared folder..."
+            sh "cp ${JAR} /var/shared-app/app.jar"
         }
+    }
+}
 
         stage('Notify') {
             steps {
